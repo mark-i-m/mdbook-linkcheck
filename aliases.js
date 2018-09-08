@@ -53,6 +53,7 @@ ALIASES['log'] = {};
 ALIASES['matches'] = {};
 ALIASES['mdbook'] = {};
 ALIASES['mdbook_linkcheck'] = {};
+ALIASES['mdbook_linkcheck'] = {};
 ALIASES['memchr'] = {};
 ALIASES['memoffset'] = {};
 ALIASES['mime'] = {};
