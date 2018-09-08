@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["COMPATIBLE_MDBOOK_VERSIONS",""]],"fn":[["check_links","The main entrypoint for this crate."]],"mod":[["errors",""]],"struct":[["Config","The configuration options available with this backend."],["Link","Information about a link in one of the book's chapters."]]});
