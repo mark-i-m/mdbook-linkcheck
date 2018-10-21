@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/mdbook-0.2.1/src/book/summary.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>summary.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/mdbook-0.2.2/src/book/summary.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>summary.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -725,6 +725,45 @@
 <span id="725">725</span>
 <span id="726">726</span>
 <span id="727">727</span>
+<span id="728">728</span>
+<span id="729">729</span>
+<span id="730">730</span>
+<span id="731">731</span>
+<span id="732">732</span>
+<span id="733">733</span>
+<span id="734">734</span>
+<span id="735">735</span>
+<span id="736">736</span>
+<span id="737">737</span>
+<span id="738">738</span>
+<span id="739">739</span>
+<span id="740">740</span>
+<span id="741">741</span>
+<span id="742">742</span>
+<span id="743">743</span>
+<span id="744">744</span>
+<span id="745">745</span>
+<span id="746">746</span>
+<span id="747">747</span>
+<span id="748">748</span>
+<span id="749">749</span>
+<span id="750">750</span>
+<span id="751">751</span>
+<span id="752">752</span>
+<span id="753">753</span>
+<span id="754">754</span>
+<span id="755">755</span>
+<span id="756">756</span>
+<span id="757">757</span>
+<span id="758">758</span>
+<span id="759">759</span>
+<span id="760">760</span>
+<span id="761">761</span>
+<span id="762">762</span>
+<span id="763">763</span>
+<span id="764">764</span>
+<span id="765">765</span>
+<span id="766">766</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">errors</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">memchr</span>::{<span class="self">self</span>, <span class="ident">Memchr</span>};
@@ -1020,6 +1059,7 @@
     <span class="doccomment">/// already been consumed by a previous parser.</span>
     <span class="kw">fn</span> <span class="ident">parse_numbered</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SummaryItem</span><span class="op">&gt;&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">items</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">root_items</span> <span class="op">=</span> <span class="number">0</span>;
         <span class="kw">let</span> <span class="ident">root_number</span> <span class="op">=</span> <span class="ident">SectionNumber</span>::<span class="ident">default</span>();
 
         <span class="comment">// we need to do this funny loop-match-if-let dance because a rule will</span>
@@ -1036,8 +1076,10 @@
             <span class="comment">// if we&#39;ve resumed after something like a rule the root sections</span>
             <span class="comment">// will be numbered from 1. We need to manually go back and update</span>
             <span class="comment">// them</span>
-            <span class="ident">update_section_numbers</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">bunch_of_items</span>, <span class="number">0</span>, <span class="ident">items</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u32</span>);
+            <span class="ident">update_section_numbers</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">bunch_of_items</span>, <span class="number">0</span>, <span class="ident">root_items</span>);
+            <span class="ident">root_items</span> <span class="op">+=</span> <span class="ident">bunch_of_items</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u32</span>;
             <span class="ident">items</span>.<span class="ident">extend</span>(<span class="ident">bunch_of_items</span>);
+
 
             <span class="kw">match</span> <span class="self">self</span>.<span class="ident">next_event</span>() {
                 <span class="prelude-val">Some</span>(<span class="ident">Event</span>::<span class="ident">Start</span>(<span class="ident">Tag</span>::<span class="ident">Paragraph</span>)) <span class="op">=&gt;</span> {
@@ -1451,6 +1493,42 @@
 
         <span class="kw">let</span> <span class="ident">got</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">parse_numbered</span>();
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">got</span>.<span class="ident">is_err</span>());
+    }
+
+    <span class="doccomment">/// Regression test for https://github.com/rust-lang-nursery/mdBook/issues/779</span>
+    <span class="doccomment">/// Ensure section numbers are correctly incremented after a horizontal separator.</span>
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">keep_numbering_after_separator</span>() {
+        <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="string">&quot;- [First](./first.md)\n---\n- [Second](./second.md)\n---\n- [Third](./third.md)\n&quot;</span>;
+        <span class="kw">let</span> <span class="ident">should_be</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[
+            <span class="ident">SummaryItem</span>::<span class="ident">Link</span>(<span class="ident">Link</span> {
+                <span class="ident">name</span>: <span class="ident">String</span>::<span class="ident">from</span>(<span class="string">&quot;First&quot;</span>),
+                <span class="ident">location</span>: <span class="ident">PathBuf</span>::<span class="ident">from</span>(<span class="string">&quot;./first.md&quot;</span>),
+                <span class="ident">number</span>: <span class="prelude-val">Some</span>(<span class="ident">SectionNumber</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="number">1</span>])),
+                <span class="ident">nested_items</span>: <span class="ident">Vec</span>::<span class="ident">new</span>(),
+            }),
+            <span class="ident">SummaryItem</span>::<span class="ident">Separator</span>,
+            <span class="ident">SummaryItem</span>::<span class="ident">Link</span>(<span class="ident">Link</span> {
+                <span class="ident">name</span>: <span class="ident">String</span>::<span class="ident">from</span>(<span class="string">&quot;Second&quot;</span>),
+                <span class="ident">location</span>: <span class="ident">PathBuf</span>::<span class="ident">from</span>(<span class="string">&quot;./second.md&quot;</span>),
+                <span class="ident">number</span>: <span class="prelude-val">Some</span>(<span class="ident">SectionNumber</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="number">2</span>])),
+                <span class="ident">nested_items</span>: <span class="ident">Vec</span>::<span class="ident">new</span>(),
+            }),
+            <span class="ident">SummaryItem</span>::<span class="ident">Separator</span>,
+            <span class="ident">SummaryItem</span>::<span class="ident">Link</span>(<span class="ident">Link</span> {
+                <span class="ident">name</span>: <span class="ident">String</span>::<span class="ident">from</span>(<span class="string">&quot;Third&quot;</span>),
+                <span class="ident">location</span>: <span class="ident">PathBuf</span>::<span class="ident">from</span>(<span class="string">&quot;./third.md&quot;</span>),
+                <span class="ident">number</span>: <span class="prelude-val">Some</span>(<span class="ident">SectionNumber</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="number">3</span>])),
+                <span class="ident">nested_items</span>: <span class="ident">Vec</span>::<span class="ident">new</span>(),
+            }),
+        ];
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">parser</span> <span class="op">=</span> <span class="ident">SummaryParser</span>::<span class="ident">new</span>(<span class="ident">src</span>);
+        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">stream</span>.<span class="ident">next</span>();
+
+        <span class="kw">let</span> <span class="ident">got</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">parse_numbered</span>().<span class="ident">unwrap</span>();
+
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">got</span>, <span class="ident">should_be</span>);
     }
 }
 </pre>
