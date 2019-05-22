@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/mdbook-0.2.2/src/config.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>config.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/mdbook-0.2.3/src/config.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>config.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../mdbook/index.html'><img src='../../rust-logo.png' alt='logo' width='100'></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -802,6 +802,19 @@
 <span id="802">802</span>
 <span id="803">803</span>
 <span id="804">804</span>
+<span id="805">805</span>
+<span id="806">806</span>
+<span id="807">807</span>
+<span id="808">808</span>
+<span id="809">809</span>
+<span id="810">810</span>
+<span id="811">811</span>
+<span id="812">812</span>
+<span id="813">813</span>
+<span id="814">814</span>
+<span id="815">815</span>
+<span id="816">816</span>
+<span id="817">817</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Mdbook&#39;s configuration system.</span>
 <span class="doccomment">//!</span>
@@ -1106,8 +1119,8 @@
             .<span class="ident">unwrap_or_default</span>();
 
         <span class="prelude-val">Ok</span>(<span class="ident">Config</span> {
-            <span class="ident">book</span>: <span class="ident">book</span>,
-            <span class="ident">build</span>: <span class="ident">build</span>,
+            <span class="ident">book</span>,
+            <span class="ident">build</span>,
             <span class="ident">rest</span>: <span class="ident">Value</span>::<span class="ident">Table</span>(<span class="ident">table</span>),
         })
     }
@@ -1220,6 +1233,8 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">HtmlConfig</span> {
     <span class="doccomment">/// The theme directory, if specified.</span>
     <span class="kw">pub</span> <span class="ident">theme</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PathBuf</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// The default theme to use, defaults to &#39;light&#39;</span>
+    <span class="kw">pub</span> <span class="ident">default_theme</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
     <span class="doccomment">/// Use &quot;smart quotes&quot; instead of the usual `&quot;` character.</span>
     <span class="kw">pub</span> <span class="ident">curly_quotes</span>: <span class="ident">bool</span>,
     <span class="doccomment">/// Should mathjax be enabled?</span>
@@ -1241,10 +1256,15 @@
     <span class="doccomment">/// This config item *should not be edited* by the end user.</span>
     <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
     <span class="kw">pub</span> <span class="ident">livereload_url</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// Should section labels be rendered?</span>
+    <span class="doccomment">/// Don&#39;t render section labels.</span>
     <span class="kw">pub</span> <span class="ident">no_section_label</span>: <span class="ident">bool</span>,
     <span class="doccomment">/// Search settings. If `None`, the default will be used.</span>
     <span class="kw">pub</span> <span class="ident">search</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Search</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// Git repository url. If `None`, the git button will not be shown.</span>
+    <span class="kw">pub</span> <span class="ident">git_repository_url</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// FontAwesome icon class to use for the Git repository link.</span>
+    <span class="doccomment">/// Defaults to `fa-github` if `None`.</span>
+    <span class="kw">pub</span> <span class="ident">git_repository_icon</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">HtmlConfig</span> {
@@ -1373,9 +1393,12 @@
 
         [output.html]
         theme = &quot;./themedir&quot;
+        default-theme = &quot;rust&quot;
         curly-quotes = true
         google-analytics = &quot;123456&quot;
         additional-css = [&quot;./foo/bar/baz.css&quot;]
+        git-repository-url = &quot;https://foo.com/&quot;
+        git-repository-icon = &quot;fa-code-fork&quot;
 
         [output.html.playpen]
         editable = true
@@ -1412,7 +1435,10 @@
             <span class="ident">google_analytics</span>: <span class="prelude-val">Some</span>(<span class="ident">String</span>::<span class="ident">from</span>(<span class="string">&quot;123456&quot;</span>)),
             <span class="ident">additional_css</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">PathBuf</span>::<span class="ident">from</span>(<span class="string">&quot;./foo/bar/baz.css&quot;</span>)],
             <span class="ident">theme</span>: <span class="prelude-val">Some</span>(<span class="ident">PathBuf</span>::<span class="ident">from</span>(<span class="string">&quot;./themedir&quot;</span>)),
+            <span class="ident">default_theme</span>: <span class="prelude-val">Some</span>(<span class="ident">String</span>::<span class="ident">from</span>(<span class="string">&quot;rust&quot;</span>)),
             <span class="ident">playpen</span>: <span class="ident">playpen_should_be</span>,
+            <span class="ident">git_repository_url</span>: <span class="prelude-val">Some</span>(<span class="ident">String</span>::<span class="ident">from</span>(<span class="string">&quot;https://foo.com/&quot;</span>)),
+            <span class="ident">git_repository_icon</span>: <span class="prelude-val">Some</span>(<span class="ident">String</span>::<span class="ident">from</span>(<span class="string">&quot;fa-code-fork&quot;</span>)),
             ..<span class="ident">Default</span>::<span class="ident">default</span>()
         };
 

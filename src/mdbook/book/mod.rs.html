@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/mdbook-0.2.2/src/book/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/mdbook-0.2.3/src/book/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../mdbook/index.html'><img src='../../../rust-logo.png' alt='logo' width='100'></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -585,21 +585,6 @@
 <span id="585">585</span>
 <span id="586">586</span>
 <span id="587">587</span>
-<span id="588">588</span>
-<span id="589">589</span>
-<span id="590">590</span>
-<span id="591">591</span>
-<span id="592">592</span>
-<span id="593">593</span>
-<span id="594">594</span>
-<span id="595">595</span>
-<span id="596">596</span>
-<span id="597">597</span>
-<span id="598">598</span>
-<span id="599">599</span>
-<span id="600">600</span>
-<span id="601">601</span>
-<span id="602">602</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! The internal representation of a book and infrastructure for loading it from</span>
 <span class="doccomment">//! disk and building it.</span>
@@ -623,8 +608,9 @@
 <span class="kw">use</span> <span class="ident">toml</span>::<span class="ident">Value</span>;
 
 <span class="kw">use</span> <span class="ident">errors</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">preprocess</span>::{<span class="ident">IndexPreprocessor</span>, <span class="ident">LinkPreprocessor</span>, <span class="ident">Preprocessor</span>,
-    <span class="ident">PreprocessorContext</span>, <span class="ident">CmdPreprocessor</span>};
+<span class="kw">use</span> <span class="ident">preprocess</span>::{
+    <span class="ident">CmdPreprocessor</span>, <span class="ident">IndexPreprocessor</span>, <span class="ident">LinkPreprocessor</span>, <span class="ident">Preprocessor</span>, <span class="ident">PreprocessorContext</span>,
+};
 <span class="kw">use</span> <span class="ident">renderer</span>::{<span class="ident">CmdRenderer</span>, <span class="ident">HtmlHandlebars</span>, <span class="ident">RenderContext</span>, <span class="ident">Renderer</span>};
 <span class="kw">use</span> <span class="ident">utils</span>;
 
@@ -763,15 +749,16 @@
     <span class="doccomment">/// Run the entire build process for a particular `Renderer`.</span>
     <span class="kw">fn</span> <span class="ident">execute_build_process</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">renderer</span>: <span class="kw-2">&amp;</span><span class="ident">Renderer</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">preprocessed_book</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">book</span>.<span class="ident">clone</span>();
-        <span class="kw">let</span> <span class="ident">preprocess_ctx</span> <span class="op">=</span> <span class="ident">PreprocessorContext</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">root</span>.<span class="ident">clone</span>(),
-                                     <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">clone</span>(),
-                                     <span class="ident">renderer</span>.<span class="ident">name</span>().<span class="ident">to_string</span>());
+        <span class="kw">let</span> <span class="ident">preprocess_ctx</span> <span class="op">=</span> <span class="ident">PreprocessorContext</span>::<span class="ident">new</span>(
+            <span class="self">self</span>.<span class="ident">root</span>.<span class="ident">clone</span>(),
+            <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">clone</span>(),
+            <span class="ident">renderer</span>.<span class="ident">name</span>().<span class="ident">to_string</span>(),
+        );
 
         <span class="kw">for</span> <span class="ident">preprocessor</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">preprocessors</span> {
             <span class="kw">if</span> <span class="ident">preprocessor_should_run</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">preprocessor</span>, <span class="ident">renderer</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">config</span>) {
                 <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Running the {} preprocessor.&quot;</span>, <span class="ident">preprocessor</span>.<span class="ident">name</span>());
-                <span class="ident">preprocessed_book</span> <span class="op">=</span>
-                    <span class="ident">preprocessor</span>.<span class="ident">run</span>(<span class="kw-2">&amp;</span><span class="ident">preprocess_ctx</span>, <span class="ident">preprocessed_book</span>)<span class="question-mark">?</span>;
+                <span class="ident">preprocessed_book</span> <span class="op">=</span> <span class="ident">preprocessor</span>.<span class="ident">run</span>(<span class="kw-2">&amp;</span><span class="ident">preprocess_ctx</span>, <span class="ident">preprocessed_book</span>)<span class="question-mark">?</span>;
             }
         }
 
@@ -781,11 +768,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">render</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">preprocessed_book</span>: <span class="kw-2">&amp;</span><span class="ident">Book</span>,
-        <span class="ident">renderer</span>: <span class="kw-2">&amp;</span><span class="ident">Renderer</span>,
-    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">render</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">preprocessed_book</span>: <span class="kw-2">&amp;</span><span class="ident">Book</span>, <span class="ident">renderer</span>: <span class="kw-2">&amp;</span><span class="ident">Renderer</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">renderer</span>.<span class="ident">name</span>();
         <span class="kw">let</span> <span class="ident">build_dir</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">build_dir_for</span>(<span class="ident">name</span>);
         <span class="kw">if</span> <span class="ident">build_dir</span>.<span class="ident">exists</span>() {
@@ -836,9 +819,8 @@
         <span class="kw">let</span> <span class="ident">temp_dir</span> <span class="op">=</span> <span class="ident">TempFileBuilder</span>::<span class="ident">new</span>().<span class="ident">prefix</span>(<span class="string">&quot;mdbook-&quot;</span>).<span class="ident">tempdir</span>()<span class="question-mark">?</span>;
 
         <span class="comment">// FIXME: Is &quot;test&quot; the proper renderer name to use here?</span>
-        <span class="kw">let</span> <span class="ident">preprocess_context</span> <span class="op">=</span> <span class="ident">PreprocessorContext</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">root</span>.<span class="ident">clone</span>(),
-                                                          <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">clone</span>(),
-                                                          <span class="string">&quot;test&quot;</span>.<span class="ident">to_string</span>());
+        <span class="kw">let</span> <span class="ident">preprocess_context</span> <span class="op">=</span>
+            <span class="ident">PreprocessorContext</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">root</span>.<span class="ident">clone</span>(), <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">clone</span>(), <span class="string">&quot;test&quot;</span>.<span class="ident">to_string</span>());
 
         <span class="kw">let</span> <span class="ident">book</span> <span class="op">=</span> <span class="ident">LinkPreprocessor</span>::<span class="ident">new</span>().<span class="ident">run</span>(<span class="kw-2">&amp;</span><span class="ident">preprocess_context</span>, <span class="self">self</span>.<span class="ident">book</span>.<span class="ident">clone</span>())<span class="question-mark">?</span>;
         <span class="comment">// Index Preprocessor is disabled so that chapter paths continue to point to the</span>
@@ -966,17 +948,11 @@
         <span class="ident">preprocessors</span>.<span class="ident">extend</span>(<span class="ident">default_preprocessors</span>());
     }
 
-    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">preprocessor_table</span>) <span class="op">=</span>
-        <span class="ident">config</span>.<span class="ident">get</span>(<span class="string">&quot;preprocessor&quot;</span>).<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident">v</span>.<span class="ident">as_table</span>())
-    {
+    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">preprocessor_table</span>) <span class="op">=</span> <span class="ident">config</span>.<span class="ident">get</span>(<span class="string">&quot;preprocessor&quot;</span>).<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident">v</span>.<span class="ident">as_table</span>()) {
         <span class="kw">for</span> <span class="ident">key</span> <span class="kw">in</span> <span class="ident">preprocessor_table</span>.<span class="ident">keys</span>() {
             <span class="kw">match</span> <span class="ident">key</span>.<span class="ident">as_ref</span>() {
-                <span class="string">&quot;links&quot;</span> <span class="op">=&gt;</span> {
-                    <span class="ident">preprocessors</span>.<span class="ident">push</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">LinkPreprocessor</span>::<span class="ident">new</span>()))
-                }
-                <span class="string">&quot;index&quot;</span> <span class="op">=&gt;</span> {
-                    <span class="ident">preprocessors</span>.<span class="ident">push</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">IndexPreprocessor</span>::<span class="ident">new</span>()))
-                }
+                <span class="string">&quot;links&quot;</span> <span class="op">=&gt;</span> <span class="ident">preprocessors</span>.<span class="ident">push</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">LinkPreprocessor</span>::<span class="ident">new</span>())),
+                <span class="string">&quot;index&quot;</span> <span class="op">=&gt;</span> <span class="ident">preprocessors</span>.<span class="ident">push</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">IndexPreprocessor</span>::<span class="ident">new</span>())),
                 <span class="ident">name</span> <span class="op">=&gt;</span> <span class="ident">preprocessors</span>.<span class="ident">push</span>(<span class="ident">interpret_custom_preprocessor</span>(
                     <span class="ident">name</span>,
                     <span class="kw-2">&amp;</span><span class="ident">preprocessor_table</span>[<span class="ident">name</span>],
@@ -988,10 +964,7 @@
     <span class="prelude-val">Ok</span>(<span class="ident">preprocessors</span>)
 }
 
-<span class="kw">fn</span> <span class="ident">interpret_custom_preprocessor</span>(
-    <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    <span class="ident">table</span>: <span class="kw-2">&amp;</span><span class="ident">Value</span>,
-) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">CmdPreprocessor</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">interpret_custom_preprocessor</span>(<span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">table</span>: <span class="kw-2">&amp;</span><span class="ident">Value</span>) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">CmdPreprocessor</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">command</span> <span class="op">=</span> <span class="ident">table</span>
         .<span class="ident">get</span>(<span class="string">&quot;command&quot;</span>)
         .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="ident">c</span>.<span class="ident">as_str</span>())
@@ -1009,8 +982,7 @@
         .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="ident">c</span>.<span class="ident">as_str</span>())
         .<span class="ident">map</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>.<span class="ident">to_string</span>());
 
-    <span class="kw">let</span> <span class="ident">command</span> <span class="op">=</span>
-        <span class="ident">table_dot_command</span>.<span class="ident">unwrap_or_else</span>(<span class="op">||</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;mdbook-{}&quot;</span>, <span class="ident">key</span>));
+    <span class="kw">let</span> <span class="ident">command</span> <span class="op">=</span> <span class="ident">table_dot_command</span>.<span class="ident">unwrap_or_else</span>(<span class="op">||</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;mdbook-{}&quot;</span>, <span class="ident">key</span>));
 
     <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">CmdRenderer</span>::<span class="ident">new</span>(<span class="ident">key</span>.<span class="ident">to_string</span>(), <span class="ident">command</span>.<span class="ident">to_string</span>()))
 }
@@ -1031,14 +1003,14 @@
     <span class="kw">let</span> <span class="ident">renderer_name</span> <span class="op">=</span> <span class="ident">renderer</span>.<span class="ident">name</span>();
 
     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">Value</span>::<span class="ident">Array</span>(<span class="kw-2">ref</span> <span class="ident">explicit_renderers</span>)) <span class="op">=</span> <span class="ident">cfg</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>) {
-        <span class="kw">return</span> <span class="ident">explicit_renderers</span>.<span class="ident">into_iter</span>()
+        <span class="kw">return</span> <span class="ident">explicit_renderers</span>
+            .<span class="ident">iter</span>()
             .<span class="ident">filter_map</span>(<span class="op">|</span><span class="ident">val</span><span class="op">|</span> <span class="ident">val</span>.<span class="ident">as_str</span>())
             .<span class="ident">any</span>(<span class="op">|</span><span class="ident">name</span><span class="op">|</span> <span class="ident">name</span> <span class="op">==</span> <span class="ident">renderer_name</span>);
     }
 
     <span class="ident">preprocessor</span>.<span class="ident">supports_renderer</span>(<span class="ident">renderer_name</span>)
 }
-
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
@@ -1142,10 +1114,7 @@
 
         <span class="comment">// make sure the `preprocessor.random` table exists</span>
         <span class="kw">let</span> <span class="ident">random</span> <span class="op">=</span> <span class="ident">cfg</span>.<span class="ident">get_preprocessor</span>(<span class="string">&quot;random&quot;</span>).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">random</span> <span class="op">=</span> <span class="ident">interpret_custom_preprocessor</span>(
-            <span class="string">&quot;random&quot;</span>,
-            <span class="kw-2">&amp;</span><span class="ident">Value</span>::<span class="ident">Table</span>(<span class="ident">random</span>.<span class="ident">clone</span>()),
-        );
+        <span class="kw">let</span> <span class="ident">random</span> <span class="op">=</span> <span class="ident">interpret_custom_preprocessor</span>(<span class="string">&quot;random&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">Value</span>::<span class="ident">Table</span>(<span class="ident">random</span>.<span class="ident">clone</span>()));
 
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">random</span>.<span class="ident">cmd</span>(), <span class="string">&quot;python random.py&quot;</span>);
     }
@@ -1160,7 +1129,8 @@
         <span class="kw">let</span> <span class="ident">cfg</span> <span class="op">=</span> <span class="ident">Config</span>::<span class="ident">from_str</span>(<span class="ident">cfg_str</span>).<span class="ident">unwrap</span>();
 
         <span class="comment">// double-check that we can access preprocessor.links.renderers[0]</span>
-        <span class="kw">let</span> <span class="ident">html</span> <span class="op">=</span> <span class="ident">cfg</span>.<span class="ident">get_preprocessor</span>(<span class="string">&quot;links&quot;</span>)
+        <span class="kw">let</span> <span class="ident">html</span> <span class="op">=</span> <span class="ident">cfg</span>
+            .<span class="ident">get_preprocessor</span>(<span class="string">&quot;links&quot;</span>)
             .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">links</span><span class="op">|</span> <span class="ident">links</span>.<span class="ident">get</span>(<span class="string">&quot;renderers&quot;</span>))
             .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">renderers</span><span class="op">|</span> <span class="ident">renderers</span>.<span class="ident">as_array</span>())
             .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">renderers</span><span class="op">|</span> <span class="ident">renderers</span>.<span class="ident">get</span>(<span class="number">0</span>))

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/handlebars-1.0.5/src/template.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>template.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/handlebars-1.1.0/src/template.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>template.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../handlebars/index.html'><img src='../../rust-logo.png' alt='logo' width='100'></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1115,14 +1115,21 @@
 <span id="1115">1115</span>
 <span id="1116">1116</span>
 <span id="1117">1117</span>
+<span id="1118">1118</span>
+<span id="1119">1119</span>
+<span id="1120">1120</span>
+<span id="1121">1121</span>
+<span id="1122">1122</span>
+<span id="1123">1123</span>
+<span id="1124">1124</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::{<span class="ident">BTreeMap</span>, <span class="ident">VecDeque</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">From</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">iter</span>::<span class="ident">Peekable</span>;
 
 <span class="kw">use</span> <span class="ident">grammar</span>::{<span class="ident">HandlebarsParser</span>, <span class="ident">Rule</span>};
+<span class="kw">use</span> <span class="ident">pest</span>::<span class="ident">error</span>::<span class="ident">LineColLocation</span>;
 <span class="kw">use</span> <span class="ident">pest</span>::<span class="ident">iterators</span>::<span class="ident">Pair</span>;
-<span class="kw">use</span> <span class="ident">pest</span>::<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">PestError</span>;
 <span class="kw">use</span> <span class="ident">pest</span>::{<span class="ident">Parser</span>, <span class="ident">Position</span>};
 
 <span class="kw">use</span> <span class="ident">serde_json</span>::<span class="ident">value</span>::<span class="ident">Value</span> <span class="kw">as</span> <span class="ident">Json</span>;
@@ -1553,24 +1560,13 @@
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">omit_pro_ws</span> <span class="op">=</span> <span class="bool-val">false</span>;
 
-        <span class="kw">let</span> <span class="ident">parser_queue</span> <span class="op">=</span>
-            <span class="ident">HandlebarsParser</span>::<span class="ident">parse</span>(<span class="ident">Rule</span>::<span class="ident">handlebars</span>, <span class="ident">source</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="kw">match</span> <span class="ident">e</span> {
-                <span class="ident">PestError</span>::<span class="ident">ParsingError</span> { <span class="ident">pos</span>, .. } <span class="op">=&gt;</span> {
-                    <span class="kw">let</span> (<span class="ident">line_no</span>, <span class="ident">col_no</span>) <span class="op">=</span> <span class="ident">pos</span>.<span class="ident">line_col</span>();
-                    <span class="ident">TemplateError</span>::<span class="ident">of</span>(<span class="ident">TemplateErrorReason</span>::<span class="ident">InvalidSyntax</span>)
-                        .<span class="ident">at</span>(<span class="ident">source</span>, <span class="ident">line_no</span>, <span class="ident">col_no</span>)
-                }
-                <span class="ident">PestError</span>::<span class="ident">CustomErrorPos</span> { <span class="ident">pos</span>, .. } <span class="op">=&gt;</span> {
-                    <span class="kw">let</span> (<span class="ident">line_no</span>, <span class="ident">col_no</span>) <span class="op">=</span> <span class="ident">pos</span>.<span class="ident">line_col</span>();
-                    <span class="ident">TemplateError</span>::<span class="ident">of</span>(<span class="ident">TemplateErrorReason</span>::<span class="ident">InvalidSyntax</span>)
-                        .<span class="ident">at</span>(<span class="ident">source</span>, <span class="ident">line_no</span>, <span class="ident">col_no</span>)
-                }
-                <span class="ident">PestError</span>::<span class="ident">CustomErrorSpan</span> { <span class="ident">span</span>, .. } <span class="op">=&gt;</span> {
-                    <span class="kw">let</span> (<span class="ident">line_no</span>, <span class="ident">col_no</span>) <span class="op">=</span> <span class="ident">span</span>.<span class="ident">start_pos</span>().<span class="ident">line_col</span>();
-                    <span class="ident">TemplateError</span>::<span class="ident">of</span>(<span class="ident">TemplateErrorReason</span>::<span class="ident">InvalidSyntax</span>)
-                        .<span class="ident">at</span>(<span class="ident">source</span>, <span class="ident">line_no</span>, <span class="ident">col_no</span>)
-                }
-            })<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">parser_queue</span> <span class="op">=</span> <span class="ident">HandlebarsParser</span>::<span class="ident">parse</span>(<span class="ident">Rule</span>::<span class="ident">handlebars</span>, <span class="ident">source</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
+            <span class="kw">let</span> (<span class="ident">line_no</span>, <span class="ident">col_no</span>) <span class="op">=</span> <span class="kw">match</span> <span class="ident">e</span>.<span class="ident">line_col</span> {
+                <span class="ident">LineColLocation</span>::<span class="ident">Pos</span>(<span class="ident">line_col</span>) <span class="op">=&gt;</span> <span class="ident">line_col</span>,
+                <span class="ident">LineColLocation</span>::<span class="ident">Span</span>(<span class="ident">line_col</span>, <span class="kw">_</span>) <span class="op">=&gt;</span> <span class="ident">line_col</span>,
+            };
+            <span class="ident">TemplateError</span>::<span class="ident">of</span>(<span class="ident">TemplateErrorReason</span>::<span class="ident">InvalidSyntax</span>).<span class="ident">at</span>(<span class="ident">source</span>, <span class="ident">line_no</span>, <span class="ident">col_no</span>)
+        })<span class="question-mark">?</span>;
 
         <span class="comment">// println!(&quot;{:?}&quot;, parser_queue.clone());</span>
 
@@ -1775,7 +1771,8 @@
                                             <span class="ident">h</span>.<span class="ident">name</span>,
                                             <span class="ident">close_tag_name</span>,
                                         ),
-                                    ).<span class="ident">at</span>(<span class="ident">source</span>, <span class="ident">line_no</span>, <span class="ident">col_no</span>));
+                                    )
+                                    .<span class="ident">at</span>(<span class="ident">source</span>, <span class="ident">line_no</span>, <span class="ident">col_no</span>));
                                 }
                             }
                             <span class="ident">Rule</span>::<span class="ident">directive_block_end</span> <span class="op">|</span> <span class="ident">Rule</span>::<span class="ident">partial_block_end</span> <span class="op">=&gt;</span> {
@@ -1796,7 +1793,8 @@
                                             <span class="ident">d</span>.<span class="ident">name</span>,
                                             <span class="ident">close_tag_name</span>,
                                         ),
-                                    ).<span class="ident">at</span>(<span class="ident">source</span>, <span class="ident">line_no</span>, <span class="ident">col_no</span>));
+                                    )
+                                    .<span class="ident">at</span>(<span class="ident">source</span>, <span class="ident">line_no</span>, <span class="ident">col_no</span>));
                                 }
                             }
                             <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
@@ -2116,15 +2114,17 @@
 <span class="attribute">#[<span class="ident">test</span>]</span>
 <span class="kw">fn</span> <span class="ident">test_literal_parameter_parser</span>() {
     <span class="kw">match</span> <span class="ident">Template</span>::<span class="ident">compile</span>(<span class="string">&quot;{{hello 1 name=\&quot;value\&quot; valid=false ref=someref}}&quot;</span>) {
-        <span class="prelude-val">Ok</span>(<span class="ident">t</span>) <span class="op">=&gt;</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">HelperExpression</span>(<span class="kw-2">ref</span> <span class="ident">ht</span>) <span class="op">=</span> <span class="ident">t</span>.<span class="ident">elements</span>[<span class="number">0</span>] {
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">ht</span>.<span class="ident">params</span>[<span class="number">0</span>], <span class="ident">Parameter</span>::<span class="ident">Literal</span>(<span class="macro">json</span><span class="macro">!</span>(<span class="number">1</span>)));
-            <span class="macro">assert_eq</span><span class="macro">!</span>(
-                <span class="ident">ht</span>.<span class="ident">hash</span>[<span class="string">&quot;name&quot;</span>],
-                <span class="ident">Parameter</span>::<span class="ident">Literal</span>(<span class="ident">Json</span>::<span class="ident">String</span>(<span class="string">&quot;value&quot;</span>.<span class="ident">to_owned</span>()))
-            );
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">ht</span>.<span class="ident">hash</span>[<span class="string">&quot;valid&quot;</span>], <span class="ident">Parameter</span>::<span class="ident">Literal</span>(<span class="ident">Json</span>::<span class="ident">Bool</span>(<span class="bool-val">false</span>)));
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">ht</span>.<span class="ident">hash</span>[<span class="string">&quot;ref&quot;</span>], <span class="ident">Parameter</span>::<span class="ident">Name</span>(<span class="string">&quot;someref&quot;</span>.<span class="ident">to_owned</span>()));
-        },
+        <span class="prelude-val">Ok</span>(<span class="ident">t</span>) <span class="op">=&gt;</span> {
+            <span class="kw">if</span> <span class="kw">let</span> <span class="ident">HelperExpression</span>(<span class="kw-2">ref</span> <span class="ident">ht</span>) <span class="op">=</span> <span class="ident">t</span>.<span class="ident">elements</span>[<span class="number">0</span>] {
+                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">ht</span>.<span class="ident">params</span>[<span class="number">0</span>], <span class="ident">Parameter</span>::<span class="ident">Literal</span>(<span class="macro">json</span><span class="macro">!</span>(<span class="number">1</span>)));
+                <span class="macro">assert_eq</span><span class="macro">!</span>(
+                    <span class="ident">ht</span>.<span class="ident">hash</span>[<span class="string">&quot;name&quot;</span>],
+                    <span class="ident">Parameter</span>::<span class="ident">Literal</span>(<span class="ident">Json</span>::<span class="ident">String</span>(<span class="string">&quot;value&quot;</span>.<span class="ident">to_owned</span>()))
+                );
+                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">ht</span>.<span class="ident">hash</span>[<span class="string">&quot;valid&quot;</span>], <span class="ident">Parameter</span>::<span class="ident">Literal</span>(<span class="ident">Json</span>::<span class="ident">Bool</span>(<span class="bool-val">false</span>)));
+                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">ht</span>.<span class="ident">hash</span>[<span class="string">&quot;ref&quot;</span>], <span class="ident">Parameter</span>::<span class="ident">Name</span>(<span class="string">&quot;someref&quot;</span>.<span class="ident">to_owned</span>()));
+            }
+        }
         <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">e</span>),
     }
 }
@@ -2132,14 +2132,16 @@
 <span class="attribute">#[<span class="ident">test</span>]</span>
 <span class="kw">fn</span> <span class="ident">test_template_mapping</span>() {
     <span class="kw">match</span> <span class="ident">Template</span>::<span class="ident">compile2</span>(<span class="string">&quot;hello\n  {{~world}}\n{{#if nice}}\n\thello\n{{/if}}&quot;</span>, <span class="bool-val">true</span>) {
-        <span class="prelude-val">Ok</span>(<span class="ident">t</span>) <span class="op">=&gt;</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">mapping</span>) <span class="op">=</span> <span class="ident">t</span>.<span class="ident">mapping</span> {
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">mapping</span>.<span class="ident">len</span>(), <span class="ident">t</span>.<span class="ident">elements</span>.<span class="ident">len</span>());
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">mapping</span>[<span class="number">0</span>], <span class="ident">TemplateMapping</span>(<span class="number">1</span>, <span class="number">1</span>));
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">mapping</span>[<span class="number">1</span>], <span class="ident">TemplateMapping</span>(<span class="number">2</span>, <span class="number">3</span>));
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">mapping</span>[<span class="number">3</span>], <span class="ident">TemplateMapping</span>(<span class="number">3</span>, <span class="number">1</span>));
-        } <span class="kw">else</span> {
-            <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;should contains mapping&quot;</span>);
-        },
+        <span class="prelude-val">Ok</span>(<span class="ident">t</span>) <span class="op">=&gt;</span> {
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">mapping</span>) <span class="op">=</span> <span class="ident">t</span>.<span class="ident">mapping</span> {
+                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">mapping</span>.<span class="ident">len</span>(), <span class="ident">t</span>.<span class="ident">elements</span>.<span class="ident">len</span>());
+                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">mapping</span>[<span class="number">0</span>], <span class="ident">TemplateMapping</span>(<span class="number">1</span>, <span class="number">1</span>));
+                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">mapping</span>[<span class="number">1</span>], <span class="ident">TemplateMapping</span>(<span class="number">2</span>, <span class="number">3</span>));
+                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">mapping</span>[<span class="number">3</span>], <span class="ident">TemplateMapping</span>(<span class="number">3</span>, <span class="number">1</span>));
+            } <span class="kw">else</span> {
+                <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;should contains mapping&quot;</span>);
+            }
+        }
         <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">e</span>),
     }
 }
@@ -2156,31 +2158,35 @@
 <span class="attribute">#[<span class="ident">test</span>]</span>
 <span class="kw">fn</span> <span class="ident">test_block_param</span>() {
     <span class="kw">match</span> <span class="ident">Template</span>::<span class="ident">compile</span>(<span class="string">&quot;{{#each people as |person|}}{{person}}{{/each}}&quot;</span>) {
-        <span class="prelude-val">Ok</span>(<span class="ident">t</span>) <span class="op">=&gt;</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">HelperBlock</span>(<span class="kw-2">ref</span> <span class="ident">ht</span>) <span class="op">=</span> <span class="ident">t</span>.<span class="ident">elements</span>[<span class="number">0</span>] {
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">BlockParam</span>::<span class="ident">Single</span>(<span class="ident">Parameter</span>::<span class="ident">Name</span>(<span class="kw-2">ref</span> <span class="ident">n</span>))) <span class="op">=</span> <span class="ident">ht</span>.<span class="ident">block_param</span> {
-                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">n</span>, <span class="string">&quot;person&quot;</span>);
+        <span class="prelude-val">Ok</span>(<span class="ident">t</span>) <span class="op">=&gt;</span> {
+            <span class="kw">if</span> <span class="kw">let</span> <span class="ident">HelperBlock</span>(<span class="kw-2">ref</span> <span class="ident">ht</span>) <span class="op">=</span> <span class="ident">t</span>.<span class="ident">elements</span>[<span class="number">0</span>] {
+                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">BlockParam</span>::<span class="ident">Single</span>(<span class="ident">Parameter</span>::<span class="ident">Name</span>(<span class="kw-2">ref</span> <span class="ident">n</span>))) <span class="op">=</span> <span class="ident">ht</span>.<span class="ident">block_param</span> {
+                    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">n</span>, <span class="string">&quot;person&quot;</span>);
+                } <span class="kw">else</span> {
+                    <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;block param expected.&quot;</span>)
+                }
             } <span class="kw">else</span> {
-                <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;block param expected.&quot;</span>)
+                <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Helper block expected&quot;</span>);
             }
-        } <span class="kw">else</span> {
-            <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Helper block expected&quot;</span>);
-        },
+        }
         <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">e</span>),
     }
 
     <span class="kw">match</span> <span class="ident">Template</span>::<span class="ident">compile</span>(<span class="string">&quot;{{#each people as |key val|}}{{person}}{{/each}}&quot;</span>) {
-        <span class="prelude-val">Ok</span>(<span class="ident">t</span>) <span class="op">=&gt;</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">HelperBlock</span>(<span class="kw-2">ref</span> <span class="ident">ht</span>) <span class="op">=</span> <span class="ident">t</span>.<span class="ident">elements</span>[<span class="number">0</span>] {
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">BlockParam</span>::<span class="ident">Pair</span>((<span class="ident">Parameter</span>::<span class="ident">Name</span>(<span class="kw-2">ref</span> <span class="ident">n1</span>), <span class="ident">Parameter</span>::<span class="ident">Name</span>(<span class="kw-2">ref</span> <span class="ident">n2</span>)))) <span class="op">=</span>
-                <span class="ident">ht</span>.<span class="ident">block_param</span>
-            {
-                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">n1</span>, <span class="string">&quot;key&quot;</span>);
-                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">n2</span>, <span class="string">&quot;val&quot;</span>);
+        <span class="prelude-val">Ok</span>(<span class="ident">t</span>) <span class="op">=&gt;</span> {
+            <span class="kw">if</span> <span class="kw">let</span> <span class="ident">HelperBlock</span>(<span class="kw-2">ref</span> <span class="ident">ht</span>) <span class="op">=</span> <span class="ident">t</span>.<span class="ident">elements</span>[<span class="number">0</span>] {
+                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">BlockParam</span>::<span class="ident">Pair</span>((<span class="ident">Parameter</span>::<span class="ident">Name</span>(<span class="kw-2">ref</span> <span class="ident">n1</span>), <span class="ident">Parameter</span>::<span class="ident">Name</span>(<span class="kw-2">ref</span> <span class="ident">n2</span>)))) <span class="op">=</span>
+                    <span class="ident">ht</span>.<span class="ident">block_param</span>
+                {
+                    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">n1</span>, <span class="string">&quot;key&quot;</span>);
+                    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">n2</span>, <span class="string">&quot;val&quot;</span>);
+                } <span class="kw">else</span> {
+                    <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;helper block param expected.&quot;</span>);
+                }
             } <span class="kw">else</span> {
-                <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;helper block param expected.&quot;</span>);
+                <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Helper block expected&quot;</span>);
             }
-        } <span class="kw">else</span> {
-            <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Helper block expected&quot;</span>);
-        },
+        }
         <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">e</span>),
     }
 }
@@ -2189,48 +2195,56 @@
 <span class="kw">fn</span> <span class="ident">test_directive</span>() {
     <span class="kw">match</span> <span class="ident">Template</span>::<span class="ident">compile</span>(<span class="string">&quot;hello {{* ssh}} world&quot;</span>) {
         <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">e</span>),
-        <span class="prelude-val">Ok</span>(<span class="ident">t</span>) <span class="op">=&gt;</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">DirectiveExpression</span>(<span class="kw-2">ref</span> <span class="ident">de</span>) <span class="op">=</span> <span class="ident">t</span>.<span class="ident">elements</span>[<span class="number">1</span>] {
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">de</span>.<span class="ident">name</span>, <span class="ident">Parameter</span>::<span class="ident">Name</span>(<span class="string">&quot;ssh&quot;</span>.<span class="ident">to_owned</span>()));
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">de</span>.<span class="ident">template</span>, <span class="prelude-val">None</span>);
-        },
+        <span class="prelude-val">Ok</span>(<span class="ident">t</span>) <span class="op">=&gt;</span> {
+            <span class="kw">if</span> <span class="kw">let</span> <span class="ident">DirectiveExpression</span>(<span class="kw-2">ref</span> <span class="ident">de</span>) <span class="op">=</span> <span class="ident">t</span>.<span class="ident">elements</span>[<span class="number">1</span>] {
+                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">de</span>.<span class="ident">name</span>, <span class="ident">Parameter</span>::<span class="ident">Name</span>(<span class="string">&quot;ssh&quot;</span>.<span class="ident">to_owned</span>()));
+                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">de</span>.<span class="ident">template</span>, <span class="prelude-val">None</span>);
+            }
+        }
     }
 
     <span class="kw">match</span> <span class="ident">Template</span>::<span class="ident">compile</span>(<span class="string">&quot;hello {{&gt; ssh}} world&quot;</span>) {
         <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">e</span>),
-        <span class="prelude-val">Ok</span>(<span class="ident">t</span>) <span class="op">=&gt;</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">PartialExpression</span>(<span class="kw-2">ref</span> <span class="ident">de</span>) <span class="op">=</span> <span class="ident">t</span>.<span class="ident">elements</span>[<span class="number">1</span>] {
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">de</span>.<span class="ident">name</span>, <span class="ident">Parameter</span>::<span class="ident">Name</span>(<span class="string">&quot;ssh&quot;</span>.<span class="ident">to_owned</span>()));
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">de</span>.<span class="ident">template</span>, <span class="prelude-val">None</span>);
-        },
+        <span class="prelude-val">Ok</span>(<span class="ident">t</span>) <span class="op">=&gt;</span> {
+            <span class="kw">if</span> <span class="kw">let</span> <span class="ident">PartialExpression</span>(<span class="kw-2">ref</span> <span class="ident">de</span>) <span class="op">=</span> <span class="ident">t</span>.<span class="ident">elements</span>[<span class="number">1</span>] {
+                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">de</span>.<span class="ident">name</span>, <span class="ident">Parameter</span>::<span class="ident">Name</span>(<span class="string">&quot;ssh&quot;</span>.<span class="ident">to_owned</span>()));
+                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">de</span>.<span class="ident">template</span>, <span class="prelude-val">None</span>);
+            }
+        }
     }
 
     <span class="kw">match</span> <span class="ident">Template</span>::<span class="ident">compile</span>(<span class="string">&quot;{{#*inline \&quot;hello\&quot;}}expand to hello{{/inline}}{{&gt; hello}}&quot;</span>) {
         <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">e</span>),
-        <span class="prelude-val">Ok</span>(<span class="ident">t</span>) <span class="op">=&gt;</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">DirectiveBlock</span>(<span class="kw-2">ref</span> <span class="ident">db</span>) <span class="op">=</span> <span class="ident">t</span>.<span class="ident">elements</span>[<span class="number">0</span>] {
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">db</span>.<span class="ident">name</span>, <span class="ident">Parameter</span>::<span class="ident">Name</span>(<span class="string">&quot;inline&quot;</span>.<span class="ident">to_owned</span>()));
-            <span class="macro">assert_eq</span><span class="macro">!</span>(
-                <span class="ident">db</span>.<span class="ident">params</span>[<span class="number">0</span>],
-                <span class="ident">Parameter</span>::<span class="ident">Literal</span>(<span class="ident">Json</span>::<span class="ident">String</span>(<span class="string">&quot;hello&quot;</span>.<span class="ident">to_owned</span>()))
-            );
-            <span class="macro">assert_eq</span><span class="macro">!</span>(
-                <span class="ident">db</span>.<span class="ident">template</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap</span>().<span class="ident">elements</span>[<span class="number">0</span>],
-                <span class="ident">TemplateElement</span>::<span class="ident">RawString</span>(<span class="string">&quot;expand to hello&quot;</span>.<span class="ident">to_owned</span>())
-            );
-        },
+        <span class="prelude-val">Ok</span>(<span class="ident">t</span>) <span class="op">=&gt;</span> {
+            <span class="kw">if</span> <span class="kw">let</span> <span class="ident">DirectiveBlock</span>(<span class="kw-2">ref</span> <span class="ident">db</span>) <span class="op">=</span> <span class="ident">t</span>.<span class="ident">elements</span>[<span class="number">0</span>] {
+                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">db</span>.<span class="ident">name</span>, <span class="ident">Parameter</span>::<span class="ident">Name</span>(<span class="string">&quot;inline&quot;</span>.<span class="ident">to_owned</span>()));
+                <span class="macro">assert_eq</span><span class="macro">!</span>(
+                    <span class="ident">db</span>.<span class="ident">params</span>[<span class="number">0</span>],
+                    <span class="ident">Parameter</span>::<span class="ident">Literal</span>(<span class="ident">Json</span>::<span class="ident">String</span>(<span class="string">&quot;hello&quot;</span>.<span class="ident">to_owned</span>()))
+                );
+                <span class="macro">assert_eq</span><span class="macro">!</span>(
+                    <span class="ident">db</span>.<span class="ident">template</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap</span>().<span class="ident">elements</span>[<span class="number">0</span>],
+                    <span class="ident">TemplateElement</span>::<span class="ident">RawString</span>(<span class="string">&quot;expand to hello&quot;</span>.<span class="ident">to_owned</span>())
+                );
+            }
+        }
     }
 
     <span class="kw">match</span> <span class="ident">Template</span>::<span class="ident">compile</span>(<span class="string">&quot;{{#&gt; layout \&quot;hello\&quot;}}expand to hello{{/layout}}{{&gt; hello}}&quot;</span>) {
         <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">e</span>),
-        <span class="prelude-val">Ok</span>(<span class="ident">t</span>) <span class="op">=&gt;</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">PartialBlock</span>(<span class="kw-2">ref</span> <span class="ident">db</span>) <span class="op">=</span> <span class="ident">t</span>.<span class="ident">elements</span>[<span class="number">0</span>] {
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">db</span>.<span class="ident">name</span>, <span class="ident">Parameter</span>::<span class="ident">Name</span>(<span class="string">&quot;layout&quot;</span>.<span class="ident">to_owned</span>()));
-            <span class="macro">assert_eq</span><span class="macro">!</span>(
-                <span class="ident">db</span>.<span class="ident">params</span>[<span class="number">0</span>],
-                <span class="ident">Parameter</span>::<span class="ident">Literal</span>(<span class="ident">Json</span>::<span class="ident">String</span>(<span class="string">&quot;hello&quot;</span>.<span class="ident">to_owned</span>()))
-            );
-            <span class="macro">assert_eq</span><span class="macro">!</span>(
-                <span class="ident">db</span>.<span class="ident">template</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap</span>().<span class="ident">elements</span>[<span class="number">0</span>],
-                <span class="ident">TemplateElement</span>::<span class="ident">RawString</span>(<span class="string">&quot;expand to hello&quot;</span>.<span class="ident">to_owned</span>())
-            );
-        },
+        <span class="prelude-val">Ok</span>(<span class="ident">t</span>) <span class="op">=&gt;</span> {
+            <span class="kw">if</span> <span class="kw">let</span> <span class="ident">PartialBlock</span>(<span class="kw-2">ref</span> <span class="ident">db</span>) <span class="op">=</span> <span class="ident">t</span>.<span class="ident">elements</span>[<span class="number">0</span>] {
+                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">db</span>.<span class="ident">name</span>, <span class="ident">Parameter</span>::<span class="ident">Name</span>(<span class="string">&quot;layout&quot;</span>.<span class="ident">to_owned</span>()));
+                <span class="macro">assert_eq</span><span class="macro">!</span>(
+                    <span class="ident">db</span>.<span class="ident">params</span>[<span class="number">0</span>],
+                    <span class="ident">Parameter</span>::<span class="ident">Literal</span>(<span class="ident">Json</span>::<span class="ident">String</span>(<span class="string">&quot;hello&quot;</span>.<span class="ident">to_owned</span>()))
+                );
+                <span class="macro">assert_eq</span><span class="macro">!</span>(
+                    <span class="ident">db</span>.<span class="ident">template</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap</span>().<span class="ident">elements</span>[<span class="number">0</span>],
+                    <span class="ident">TemplateElement</span>::<span class="ident">RawString</span>(<span class="string">&quot;expand to hello&quot;</span>.<span class="ident">to_owned</span>())
+                );
+            }
+        }
     }
 }
 </pre></div>

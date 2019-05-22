@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/reqwest-0.9.3/src/async_impl/response.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>response.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/reqwest-0.9.17/src/async_impl/response.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>response.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../reqwest/index.html'><img src='../../../rust-logo.png' alt='logo' width='100'></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -257,19 +257,98 @@
 <span id="257">257</span>
 <span id="258">258</span>
 <span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">mem</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">marker</span>::<span class="ident">PhantomData</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">net</span>::<span class="ident">SocketAddr</span>;
 
 <span class="kw">use</span> <span class="ident">futures</span>::{<span class="ident">Async</span>, <span class="ident">Future</span>, <span class="ident">Poll</span>, <span class="ident">Stream</span>};
 <span class="kw">use</span> <span class="ident">futures</span>::<span class="ident">stream</span>::<span class="ident">Concat2</span>;
+<span class="kw">use</span> <span class="ident">http</span>;
 <span class="kw">use</span> <span class="ident">hyper</span>::{<span class="ident">HeaderMap</span>, <span class="ident">StatusCode</span>, <span class="ident">Version</span>};
+<span class="kw">use</span> <span class="ident">hyper</span>::<span class="ident">client</span>::<span class="ident">connect</span>::<span class="ident">HttpInfo</span>;
+<span class="kw">use</span> <span class="ident">hyper</span>::<span class="ident">header</span>::{<span class="ident">CONTENT_LENGTH</span>};
+<span class="kw">use</span> <span class="ident">tokio</span>::<span class="ident">timer</span>::<span class="ident">Delay</span>;
 <span class="kw">use</span> <span class="ident">serde</span>::<span class="ident">de</span>::<span class="ident">DeserializeOwned</span>;
 <span class="kw">use</span> <span class="ident">serde_json</span>;
 <span class="kw">use</span> <span class="ident">url</span>::<span class="ident">Url</span>;
-<span class="kw">use</span> <span class="ident">http</span>;
 
+
+<span class="kw">use</span> <span class="ident">cookie</span>;
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">Decoder</span>;
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">body</span>::<span class="ident">Body</span>;
 
@@ -283,14 +362,19 @@
     <span class="ident">url</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span>,
     <span class="ident">body</span>: <span class="ident">Decoder</span>,
     <span class="ident">version</span>: <span class="ident">Version</span>,
+    <span class="ident">extensions</span>: <span class="ident">http</span>::<span class="ident">Extensions</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Response</span> {
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="kw-2">mut</span> <span class="ident">res</span>: ::<span class="ident">hyper</span>::<span class="ident">Response</span><span class="op">&lt;</span>::<span class="ident">hyper</span>::<span class="ident">Body</span><span class="op">&gt;</span>, <span class="ident">url</span>: <span class="ident">Url</span>, <span class="ident">gzip</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="ident">Response</span> {
-        <span class="kw">let</span> <span class="ident">status</span> <span class="op">=</span> <span class="ident">res</span>.<span class="ident">status</span>();
-        <span class="kw">let</span> <span class="ident">version</span> <span class="op">=</span> <span class="ident">res</span>.<span class="ident">version</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">headers</span> <span class="op">=</span> <span class="ident">mem</span>::<span class="ident">replace</span>(<span class="ident">res</span>.<span class="ident">headers_mut</span>(), <span class="ident">HeaderMap</span>::<span class="ident">new</span>());
-        <span class="kw">let</span> <span class="ident">decoder</span> <span class="op">=</span> <span class="ident">Decoder</span>::<span class="ident">detect</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">headers</span>, <span class="ident">Body</span>::<span class="ident">wrap</span>(<span class="ident">res</span>.<span class="ident">into_body</span>()), <span class="ident">gzip</span>);
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">res</span>: ::<span class="ident">hyper</span>::<span class="ident">Response</span><span class="op">&lt;</span>::<span class="ident">hyper</span>::<span class="ident">Body</span><span class="op">&gt;</span>, <span class="ident">url</span>: <span class="ident">Url</span>, <span class="ident">gzip</span>: <span class="ident">bool</span>, <span class="ident">timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Delay</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">Response</span> {
+        <span class="kw">let</span> (<span class="ident">parts</span>, <span class="ident">body</span>) <span class="op">=</span> <span class="ident">res</span>.<span class="ident">into_parts</span>();
+        <span class="kw">let</span> <span class="ident">status</span> <span class="op">=</span> <span class="ident">parts</span>.<span class="ident">status</span>;
+        <span class="kw">let</span> <span class="ident">version</span> <span class="op">=</span> <span class="ident">parts</span>.<span class="ident">version</span>;
+        <span class="kw">let</span> <span class="ident">extensions</span> <span class="op">=</span> <span class="ident">parts</span>.<span class="ident">extensions</span>;
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">headers</span> <span class="op">=</span> <span class="ident">parts</span>.<span class="ident">headers</span>;
+        <span class="kw">let</span> <span class="ident">decoder</span> <span class="op">=</span> <span class="ident">Decoder</span>::<span class="ident">detect</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">headers</span>, <span class="ident">Body</span>::<span class="ident">response</span>(<span class="ident">body</span>, <span class="ident">timeout</span>), <span class="ident">gzip</span>);
+
         <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Response: &#39;{}&#39; for {}&quot;</span>, <span class="ident">status</span>, <span class="ident">url</span>);
         <span class="ident">Response</span> {
             <span class="ident">status</span>,
@@ -298,14 +382,10 @@
             <span class="ident">url</span>: <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">url</span>),
             <span class="ident">body</span>: <span class="ident">decoder</span>,
             <span class="ident">version</span>,
+            <span class="ident">extensions</span>,
         }
     }
 
-    <span class="doccomment">/// Get the final `Url` of this `Response`.</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">url</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Url</span> {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">url</span>
-    }
 
     <span class="doccomment">/// Get the `StatusCode` of this `Response`.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
@@ -323,6 +403,43 @@
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">headers_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HeaderMap</span> {
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">headers</span>
+    }
+
+    <span class="doccomment">/// Retrieve the cookies contained in the response.</span>
+    <span class="doccomment">/// </span>
+    <span class="doccomment">/// Note that invalid &#39;Set-Cookie&#39; headers will be ignored.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cookies</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">cookie</span>::<span class="ident">Cookie</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;a</span> {
+        <span class="ident">cookie</span>::<span class="ident">extract_response_cookies</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">headers</span>)
+            .<span class="ident">filter_map</span>(<span class="prelude-ty">Result</span>::<span class="ident">ok</span>)
+    }
+
+    <span class="doccomment">/// Get the final `Url` of this `Response`.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">url</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Url</span> {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">url</span>
+    }
+
+    <span class="doccomment">/// Get the remote address used to get this `Response`.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">remote_addr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SocketAddr</span><span class="op">&gt;</span> {
+        <span class="self">self</span>
+            .<span class="ident">extensions</span>
+            .<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">HttpInfo</span><span class="op">&gt;</span>()
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">info</span><span class="op">|</span> <span class="ident">info</span>.<span class="ident">remote_addr</span>())
+    }
+
+    <span class="doccomment">/// Get the content-length of this response, if known.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Reasons it may not be known:</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// - The server didn&#39;t send a `content-length` header.</span>
+    <span class="doccomment">/// - The response is gzipped and automatically decoded (thus changing</span>
+    <span class="doccomment">///   the actual decoded length).</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">content_length</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
+        <span class="self">self</span>
+            .<span class="ident">headers</span>()
+            .<span class="ident">get</span>(<span class="ident">CONTENT_LENGTH</span>)
+            .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">ct_len</span><span class="op">|</span> <span class="ident">ct_len</span>.<span class="ident">to_str</span>().<span class="ident">ok</span>())
+            .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">ct_len</span><span class="op">|</span> <span class="ident">ct_len</span>.<span class="ident">parse</span>().<span class="ident">ok</span>())
     }
 
     <span class="doccomment">/// Consumes the response, returning the body</span>
@@ -354,7 +471,7 @@
 
     <span class="doccomment">/// Try to deserialize the response body as JSON using `serde`.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">json</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">DeserializeOwned</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Json</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">json</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">DeserializeOwned</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw">impl</span> <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">T</span>, <span class="ident">Error</span> <span class="op">=</span> ::<span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">mem</span>::<span class="ident">replace</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">body</span>, <span class="ident">Decoder</span>::<span class="ident">empty</span>());
 
         <span class="ident">Json</span> {
@@ -386,10 +503,38 @@
     <span class="doccomment">/// ```</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">error_for_status</span>(<span class="self">self</span>) <span class="op">-&gt;</span> ::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">status</span>.<span class="ident">is_client_error</span>() {
-            <span class="prelude-val">Err</span>(::<span class="ident">error</span>::<span class="ident">client_error</span>(<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">url</span>, <span class="self">self</span>.<span class="ident">status</span>))
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">status</span>.<span class="ident">is_server_error</span>() {
-            <span class="prelude-val">Err</span>(::<span class="ident">error</span>::<span class="ident">server_error</span>(<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">url</span>, <span class="self">self</span>.<span class="ident">status</span>))
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">status</span>.<span class="ident">is_client_error</span>() <span class="op">||</span> <span class="self">self</span>.<span class="ident">status</span>.<span class="ident">is_server_error</span>() {
+            <span class="prelude-val">Err</span>(::<span class="ident">error</span>::<span class="ident">status_code</span>(<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">url</span>, <span class="self">self</span>.<span class="ident">status</span>))
+        } <span class="kw">else</span> {
+            <span class="prelude-val">Ok</span>(<span class="self">self</span>)
+        }
+    }
+
+    <span class="doccomment">/// Turn a reference to a response into an error if the server returned an error.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Example</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">/// # use reqwest::async::Response;</span>
+    <span class="doccomment">/// fn on_response(res: &amp;Response) {</span>
+    <span class="doccomment">///     match res.error_for_status_ref() {</span>
+    <span class="doccomment">///         Ok(_res) =&gt; (),</span>
+    <span class="doccomment">///         Err(err) =&gt; {</span>
+    <span class="doccomment">///             // asserting a 400 as an example</span>
+    <span class="doccomment">///             // it could be any status between 400...599</span>
+    <span class="doccomment">///             assert_eq!(</span>
+    <span class="doccomment">///                 err.status(),</span>
+    <span class="doccomment">///                 Some(reqwest::StatusCode::BAD_REQUEST)</span>
+    <span class="doccomment">///             );</span>
+    <span class="doccomment">///         }</span>
+    <span class="doccomment">///     }</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// # fn main() {}</span>
+    <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">error_for_status_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> ::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="self">Self</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">status</span>.<span class="ident">is_client_error</span>() <span class="op">||</span> <span class="self">self</span>.<span class="ident">status</span>.<span class="ident">is_server_error</span>() {
+            <span class="prelude-val">Err</span>(::<span class="ident">error</span>::<span class="ident">status_code</span>(<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">url</span>.<span class="ident">clone</span>(), <span class="self">self</span>.<span class="ident">status</span>))
         } <span class="kw">else</span> {
             <span class="prelude-val">Ok</span>(<span class="self">self</span>)
         }
@@ -421,6 +566,7 @@
             <span class="ident">url</span>: <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">url</span>),
             <span class="ident">body</span>: <span class="ident">body</span>,
             <span class="ident">version</span>: <span class="ident">parts</span>.<span class="ident">version</span>,
+            <span class="ident">extensions</span>: <span class="ident">parts</span>.<span class="ident">extensions</span>,
         }
     }
 }
